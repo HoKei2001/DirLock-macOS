@@ -23,18 +23,15 @@ Grab the latest `DirLock.zip` from the [Releases](../../releases) page, unzip, a
 
 **First launch — bypass Gatekeeper (required once):**
 
-The app is unsigned, so macOS will block it on first open. Two ways to fix:
+The app is unsigned, so macOS will block it. Run this command after moving the app to `/Applications`:
 
-**Option A — Right-click to open:**
-1. Right-click `DirLock.app` → **Open**
-2. Click **Open** in the warning dialog
+```bash
+xattr -d com.apple.quarantine /Applications/DirLock.app
+```
 
-**Option B — System Settings (if Option A doesn't work):**
-1. Try to open the app normally — it will be blocked
-2. Go to **System Settings → Privacy & Security**
-3. Scroll down and click **Open Anyway** next to the DirLock entry
+Then double-click to open normally. No more warnings after that.
 
-After the first successful launch, you can open it normally by double-clicking.
+> **Alternative (macOS Ventura and earlier):** right-click `DirLock.app` → **Open** → **Open**, or go to System Settings → Privacy & Security → **Open Anyway**.
 
 ---
 
