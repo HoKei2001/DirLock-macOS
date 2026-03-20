@@ -9,6 +9,7 @@ class DirectoryStore: ObservableObject {
     init() {
         load()
         syncACLStates()
+        scanForLockedDirectories()
     }
 
     // MARK: - Persistence
@@ -24,6 +25,34 @@ class DirectoryStore: ObservableObject {
         if let encoded = try? JSONEncoder().encode(directories) {
             UserDefaults.standard.set(encoded, forKey: Self.userDefaultsKey)
         }
+    }
+
+    // MARK: - Auto-scan for already-locked directories
+
+    func scanForLockedDirectories() {
+        let fm = FileManager.default
+        let home = fm.homeDirectoryForCurrentUser.path
+        let scanRoots = [
+            home,
+            "\(home)/Desktop",
+            "\(home)/Documents",
+            "\(home)/Downloads",
+        ]
+
+        var changed = false
+        for root in scanRoots {
+            guard let entries = try? fm.contentsOfDirectory(atPath: root) else { continue }
+            for entry in entries {
+                let path = "\(root)/\(entry)"
+                var isDir: ObjCBool = false
+                guard fm.fileExists(atPath: path, isDirectory: &isDir), isDir.boolValue else { continue }
+                guard !directories.contains(where: { $0.path == path }) else { continue }
+                guard ACLService.shared.isLocked(path: path) else { continue }
+                directories.append(DirectoryItem(path: path, isLocked: true))
+                changed = true
+            }
+        }
+        if changed { save() }
     }
 
     // MARK: - ACL Sync
