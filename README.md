@@ -21,7 +21,20 @@ A macOS menu bar app that locks/unlocks directories with one click, preventing A
 
 Grab the latest `DirLock.zip` from the [Releases](../../releases) page, unzip, and drag `DirLock.app` to `/Applications`.
 
-**First launch:** right-click `DirLock.app` → **Open** → **Open** (required once to bypass Gatekeeper, since the app is unsigned)
+**First launch — bypass Gatekeeper (required once):**
+
+The app is unsigned, so macOS will block it on first open. Two ways to fix:
+
+**Option A — Right-click to open:**
+1. Right-click `DirLock.app` → **Open**
+2. Click **Open** in the warning dialog
+
+**Option B — System Settings (if Option A doesn't work):**
+1. Try to open the app normally — it will be blocked
+2. Go to **System Settings → Privacy & Security**
+3. Scroll down and click **Open Anyway** next to the DirLock entry
+
+After the first successful launch, you can open it normally by double-clicking.
 
 ---
 
